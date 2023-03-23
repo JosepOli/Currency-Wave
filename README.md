@@ -1,6 +1,6 @@
 # Currency Wave
 
-Currency Wave is an Android application that provides real-time currency exchange rates and allows users to convert currencies. The app uses the [Open Exchange Rates API](https://openexchangerates.org/) to fetch the latest exchange rates.
+Currency Wave is an Android application that provides real-time currency exchange rates and allows users to convert currencies. The app uses the [App Exchange Rate API](https://app.exchangerate-api.com//) to fetch the latest exchange rates.
 
 ## Features
 
