@@ -16,7 +16,7 @@ Currency Wave is an Android application that provides real-time currency exchang
 
 ## Getting Started
 
-1. Clone the repository: `git clone https://github.com/JosepOli/currency-wave.git`
+1. Clone the repository: `git clone https://github.com/JosepOli/currency-wave-firebase.git`
 2. Open the project in Android Studio.
 3. Build and run the app.
 
