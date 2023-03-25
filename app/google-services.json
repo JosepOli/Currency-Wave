@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "396262983326",
+    "firebase_url": "https://currency-wave-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "currency-wave",
+    "storage_bucket": "currency-wave.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396262983326:android:adc14efaa3c8a07792dd8f",
+        "android_client_info": {
+          "package_name": "com.example.currencywave"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "396262983326-l290kinf1i9di6k2csbhern3ka9hunb0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4szUZOG9lBoIXwgsqYdHLDaOgPbfbNTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "396262983326-l290kinf1i9di6k2csbhern3ka9hunb0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
