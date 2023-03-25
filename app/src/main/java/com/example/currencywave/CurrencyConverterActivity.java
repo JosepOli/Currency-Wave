@@ -4,11 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.*;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import android.content.Context;
-
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -18,15 +13,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.example.currencywave.api.CurrencyApi;
-import com.example.currencywave.model.CurrencyApiResponse;
-import com.example.currencywave.network.RetrofitClient;
 
 public class CurrencyConverterActivity extends AppCompatActivity {
 
@@ -35,25 +25,25 @@ public class CurrencyConverterActivity extends AppCompatActivity {
     private Spinner toCurrencySpinner;
     private EditText amountEditText;
     private TextView resultTextView;
-    private Button convertButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_converter);
 
-        // Inicializamos Firebase
+        // We initialize FireBase
         FirebaseApp.initializeApp(this);
         db = FirebaseFirestore.getInstance();
 
-        // Inicializa los elementos de la interfaz de usuario
+        // We initialize the UI elements
         fromCurrencySpinner = findViewById(R.id.from_currency_spinner);
         toCurrencySpinner = findViewById(R.id.to_currency_spinner);
         amountEditText = findViewById(R.id.amount_edit_text);
         resultTextView = findViewById(R.id.result_text_view);
-        convertButton = findViewById(R.id.convert_button);
+        Button convertButton = findViewById(R.id.convert_button);
 
-        // Llama a setupSpinners() después de inicializar los spinners
+
+        // Calling setupSpinners() after initializing them
         setupSpinners();
 
         convertButton.setOnClickListener(view -> {
@@ -77,14 +67,25 @@ public class CurrencyConverterActivity extends AppCompatActivity {
                 QuerySnapshot result = task.getResult();
                 if (result != null && !result.isEmpty()) {
                     DocumentSnapshot document = result.getDocuments().get(0);
-                    Map<String, Object> ratesData = (Map<String, Object>) document.get("rates");
-                    if (ratesData != null && ratesData.containsKey(toCurrency) && ratesData.containsKey(fromCurrency)) {
-                        double toCurrencyRate = ((Number) ratesData.get(toCurrency)).doubleValue();
-                        double fromCurrencyRate = ((Number) ratesData.get(fromCurrency)).doubleValue();
-                        double convertedAmount = (amount * toCurrencyRate) / fromCurrencyRate;
-                        resultTextView.setText(String.format(Locale.getDefault(), "%.2f", convertedAmount));
+                    Object ratesObject = document.get("rates");
+                    if (ratesObject instanceof Map) {
+                        Map<String, Object> ratesData = (Map<String, Object>) ratesObject;
+                        if (ratesData.containsKey(toCurrency) && ratesData.containsKey(fromCurrency)) {
+                            Object toCurrencyRateObj = ratesData.get(toCurrency);
+                            Object fromCurrencyRateObj = ratesData.get(fromCurrency);
+                            if (toCurrencyRateObj instanceof Number && fromCurrencyRateObj instanceof Number) {
+                                double toCurrencyRate = ((Number) toCurrencyRateObj).doubleValue();
+                                double fromCurrencyRate = ((Number) fromCurrencyRateObj).doubleValue();
+                                double convertedAmount = (amount * toCurrencyRate) / fromCurrencyRate;
+                                resultTextView.setText(String.format(Locale.getDefault(), "%.2f", convertedAmount));
+                            } else {
+                                Toast.makeText(CurrencyConverterActivity.this, "Error: los datos de cambio son erroneos", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(CurrencyConverterActivity.this, "Moneda no disponible", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(CurrencyConverterActivity.this, "Moneda no disponible", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CurrencyConverterActivity.this, "Error: los datos de cambio son erroneos", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(CurrencyConverterActivity.this, "Error en la respuesta de la API", Toast.LENGTH_SHORT).show();
@@ -94,6 +95,7 @@ public class CurrencyConverterActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
     private void setupSpinners() {
