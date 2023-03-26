@@ -1,7 +1,6 @@
 package com.example.currencywave;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -122,7 +121,7 @@ public class CurrencyConverterActivity extends AppCompatActivity {
         fromCurrencyAutoComplete.setThreshold(1);
         toCurrencyAutoComplete.setThreshold(1);
 
-        // Added click listeners to show the dropdown when the user clicks on the AutoCompleteTextView using lambda expressions
+        // Added click listeners to show the dropdown when the user clicks on the AutoCompleteTextView, using lambda expressions
         fromCurrencyAutoComplete.setOnClickListener(v -> fromCurrencyAutoComplete.showDropDown());
         toCurrencyAutoComplete.setOnClickListener(v -> toCurrencyAutoComplete.showDropDown());
     }

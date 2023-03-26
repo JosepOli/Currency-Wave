@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">CurrencyWave</string>
     <string name="enter_amount">Por favor, ingrese una cantidad</string>
     <string name="exchange_rate_data_error">Error: los datos de cambio son erroneos</string>
     <string name="conversion_error">Error: Los datos de cambio son erroneos</string>

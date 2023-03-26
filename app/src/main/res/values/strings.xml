@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="enter_amount" translatable="false">Please enter an amount</string>
+    <string name="app_name">CurrencyWave</string>
+    <string name="api_error">API Error</string>
+    <string name="conversion_error">Conversion Error</string>
+    <string name="enter_amount">Please enter an amount</string>
     <string name="exchange_rate_data_error">Error: Invalid exchange rate data</string>
     <string name="currency_not_available">Currency not available</string>
     <string name="api_response_error">API response error</string>
