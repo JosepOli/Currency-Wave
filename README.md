@@ -1,37 +1,37 @@
 # Currency Wave
 
-Currency Wave is an Android application that provides real-time currency exchange rates and allows users to convert currencies. The app uses the [App Exchange Rate API](https://app.exchangerate-api.com//) to fetch the latest exchange rates.
+Currency Wave is an Android application that provides real-time currency exchange rates and allows users to convert currencies. The app fetches the latest exchange rates from our Firestore database, which is updated periodically.
 
 ## Features
 
 - View real-time exchange rates for over 150 currencies.
 - Convert currencies using the built-in converter tool.
-- View historical exchange rate charts.
-- Save favorite currencies for quick access.
 
 ## Requirements
 
 - Android Studio 4.0 or later
 - Java Development Kit (JDK) version 8 or later
+- A Firebase project with Firestore enabled
 
 ## Getting Started
 
 1. Clone the repository: `git clone https://github.com/JosepOli/currency-wave-firebase.git`
 2. Open the project in Android Studio.
-3. Build and run the app.
+3. Connect the app to your Firebase project by following the [Firebase Android setup guide](https://firebase.google.com/docs/android/setup)
+4. Set up a Firestore database and update it with the latest exchange rates.
+5. Build and run the app.
 
 ## Usage
 
 - To view exchange rates, select the desired currencies from the list.
 - To convert currencies, use the built-in converter tool by entering the amount and selecting the desired currencies.
-- To view historical exchange rate charts, select a currency and tap the "View Chart" button.
 
 ## Credits
 
-This app uses the following open-source libraries:
+This app uses the following services and libraries:
 
-- [Volley](https://developer.android.com/training/volley) - for network requests
-- [Gson](https://github.com/google/gson) - for JSON serialization/deserialization
+- [Firebase Firestore](https://firebase.google.com/products/firestore) - for storing and retrieving exchange rate data
+- [AndroidX](https://developer.android.com/jetpack/androidx) - for modern Android development.
 
 ## License
 
