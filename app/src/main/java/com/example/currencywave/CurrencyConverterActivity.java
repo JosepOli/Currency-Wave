@@ -1,8 +1,15 @@
 package com.example.currencywave;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.*;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -10,19 +17,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class CurrencyConverterActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
-    private Spinner fromCurrencySpinner;
-    private Spinner toCurrencySpinner;
+    private AutoCompleteTextView fromCurrencyAutoComplete;
+    private AutoCompleteTextView toCurrencyAutoComplete;
     private EditText amountEditText;
     private TextView resultTextView;
 
@@ -36,26 +40,24 @@ public class CurrencyConverterActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         // We initialize the UI elements
-        fromCurrencySpinner = findViewById(R.id.from_currency_spinner);
-        toCurrencySpinner = findViewById(R.id.to_currency_spinner);
+        fromCurrencyAutoComplete = findViewById(R.id.from_currency_autocomplete);
+        toCurrencyAutoComplete = findViewById(R.id.to_currency_autocomplete);
         amountEditText = findViewById(R.id.amount_edit_text);
         resultTextView = findViewById(R.id.result_text_view);
         Button convertButton = findViewById(R.id.convert_button);
 
-
-        // Calling setupSpinners() after initializing them
-        setupSpinners();
+        // Set up the AutoCompleteTextViews
+        setupAutoCompleteTextViews();
 
         convertButton.setOnClickListener(view -> {
-            String fromCurrency = fromCurrencySpinner.getSelectedItem().toString();
-            String toCurrency = toCurrencySpinner.getSelectedItem().toString();
+            String fromCurrency = fromCurrencyAutoComplete.getText().toString();
+            String toCurrency = toCurrencyAutoComplete.getText().toString();
             String amountStr = amountEditText.getText().toString();
             if (!amountStr.isEmpty()) {
                 double amount = Double.parseDouble(amountStr);
                 convertCurrency(fromCurrency, toCurrency, amount);
             } else {
-                Toast.makeText(CurrencyConverterActivity.this, "Por favor, ingrese una cantidad", Toast.LENGTH_SHORT).show();
-            }
+                Toast.makeText(CurrencyConverterActivity.this, getString(R.string.enter_amount), Toast.LENGTH_SHORT).show();            }
         });
     }
 
@@ -70,36 +72,35 @@ public class CurrencyConverterActivity extends AppCompatActivity {
                     Object ratesObject = document.get("rates");
                     if (ratesObject instanceof Map) {
                         Map<String, Object> ratesData = (Map<String, Object>) ratesObject;
-                        if (ratesData.containsKey(toCurrency) && ratesData.containsKey(fromCurrency)) {
-                            Object toCurrencyRateObj = ratesData.get(toCurrency);
-                            Object fromCurrencyRateObj = ratesData.get(fromCurrency);
+                        String fromCurrencyUpper = fromCurrency.toUpperCase();
+                        String toCurrencyUpper = toCurrency.toUpperCase();
+                        if (ratesData.containsKey(toCurrencyUpper) && ratesData.containsKey(fromCurrencyUpper)) {
+                            Object toCurrencyRateObj = ratesData.get(toCurrencyUpper);
+                            Object fromCurrencyRateObj = ratesData.get(fromCurrencyUpper);
                             if (toCurrencyRateObj instanceof Number && fromCurrencyRateObj instanceof Number) {
                                 double toCurrencyRate = ((Number) toCurrencyRateObj).doubleValue();
                                 double fromCurrencyRate = ((Number) fromCurrencyRateObj).doubleValue();
                                 double convertedAmount = (amount * toCurrencyRate) / fromCurrencyRate;
                                 resultTextView.setText(String.format(Locale.getDefault(), "%.2f", convertedAmount));
                             } else {
-                                Toast.makeText(CurrencyConverterActivity.this, "Error: los datos de cambio son erroneos", Toast.LENGTH_SHORT).show();
-                            }
+                                Toast.makeText(CurrencyConverterActivity.this, getString(R.string.exchange_rate_data_error), Toast.LENGTH_SHORT).show();                            }
                         } else {
-                            Toast.makeText(CurrencyConverterActivity.this, "Moneda no disponible", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CurrencyConverterActivity.this, getString(R.string.currency_not_available), Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(CurrencyConverterActivity.this, "Error: los datos de cambio son erroneos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CurrencyConverterActivity.this, getString(R.string.exchange_rate_data_error), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(CurrencyConverterActivity.this, "Error en la respuesta de la API", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CurrencyConverterActivity.this, getString(R.string.api_response_error), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(CurrencyConverterActivity.this, "Error en la llamada a la API", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CurrencyConverterActivity.this, getString(R.string.api_call_error), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
-
-    private void setupSpinners() {
-        // Lista de monedas que quieres mostrar en los spinners
+    private void setupAutoCompleteTextViews() {
+        // List of currencies we want to display in the AutoCompleteTextViews
         List<String> currencyList = Arrays.asList("USD", "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD",
                 "BIF", "BMD", "BND", "BOB", "BRL", "BSD", "BTN", "BWP", "BYN", "BZD", "CAD", "CDF", "CHF", "CLP", "CNY", "COP", "CRC", "CUP", "CVE", "CZK", "DJF",
                 "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "EUR", "FJD", "FKP", "FOK", "GBP", "GEL", "GGP", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL",
@@ -110,14 +111,19 @@ public class CurrencyConverterActivity extends AppCompatActivity {
                 "TVD", "TWD", "TZS", "UAH", "UGX", "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XDR", "XOF", "XPF", "YER", "ZAR", "ZMW", "ZWL");
 
 
-        // Crea un ArrayAdapter usando el string array y un spinner predeterminado
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currencyList);
+        // Created an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, currencyList);
 
-        // Especifica el layout a utilizar cuando la lista de opciones aparece
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Adapter applied to the AutoCompleteTextViews
+        fromCurrencyAutoComplete.setAdapter(adapter);
+        toCurrencyAutoComplete.setAdapter(adapter);
 
-        // Aplica el adaptador a los spinners
-        fromCurrencySpinner.setAdapter(adapter);
-        toCurrencySpinner.setAdapter(adapter);
+        // Set the threshold at 1 for showing suggestions
+        fromCurrencyAutoComplete.setThreshold(1);
+        toCurrencyAutoComplete.setThreshold(1);
+
+        // Added click listeners to show the dropdown when the user clicks on the AutoCompleteTextView using lambda expressions
+        fromCurrencyAutoComplete.setOnClickListener(v -> fromCurrencyAutoComplete.showDropDown());
+        toCurrencyAutoComplete.setOnClickListener(v -> toCurrencyAutoComplete.showDropDown());
     }
 }

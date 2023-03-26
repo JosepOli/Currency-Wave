@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enter_amount">Por favor, ingrese una cantidad</string>
+    <string name="exchange_rate_data_error">Error: los datos de cambio son erroneos</string>
+    <string name="conversion_error">Error: Los datos de cambio son erroneos</string>
+    <string name="currency_not_available">Moneda no disponible</string>
+    <string name="api_response_error">Error en la respuesta de la API</string>
+    <string name="api_error">Error en la respuesta de la API</string>
+    <string name="api_call_error">Error en la llamada a la API</string>
+    <string name="from_currency_hint">Moneda de origen</string>
+    <string name="to_currency_hint">Moneda de destino</string>
+    <string name="quantity_hint">Cantidad</string>
+    <string name="convert_button_text">Convertir</string>
+</resources>
