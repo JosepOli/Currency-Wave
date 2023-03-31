@@ -10,8 +10,6 @@ public class CurrencyApiResponse {
     @SerializedName("conversion_rates")
     private Map<String, Double> conversionRates;
 
-    // Otros atributos como "error" si es necesario
-
     public String getBase() {
         return base;
     }
@@ -28,5 +26,4 @@ public class CurrencyApiResponse {
         this.conversionRates = conversionRates;
     }
 
-    // Getters y setters para otros atributos si es necesario
 }
