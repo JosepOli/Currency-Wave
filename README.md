@@ -32,7 +32,3 @@ This app uses the following services and libraries:
 
 - [Firebase Firestore](https://firebase.google.com/products/firestore) - for storing and retrieving exchange rate data
 - [AndroidX](https://developer.android.com/jetpack/androidx) - for modern Android development.
-
-## License
-
-This project is licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
